@@ -1,6 +1,6 @@
 import asyncio
 from bscscan import BscScan
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_mysqldb import MySQL
 from flask_cors import CORS, cross_origin
 import ast
@@ -14,6 +14,11 @@ import pandas as pd
 import pandavro as pdx
 from AccessData import sql_querys 
 
+import base64
+from io import BytesIO
+
+from matplotlib.figure import Figure
+
 from config import config
 from config import (YOUR_API_KEY)
 from validations import *
@@ -23,17 +28,28 @@ app = Flask(__name__)
 
 conexion = MySQL(app)
 
-# Function that returns all employees
+# WEB Function home
+@app.route("/")
+def index():
+    return render_template('index.html')
+
+# WEB Function events_by_address
+@app.route('/events_by_address/', methods=['POST'])
+def events_by_address():
+    id_wallet = request.form.get('id_wallet')
+    return render_template('events_by_address.html', id_wallet = id_wallet)
+
+# API Function that returns all employees
 @app.route('/get_bep20_token_transfer_events_by_address', methods=['POST'])
 def list_get_bep20_token_transfer_events_by_address():
     print (request.json)
     if (wallet_id_validation(request.json['id_wallet'])):
         resp = asyncio.run(get_bep20_token_transfer_events_by_address())
         insert_bep20_token_transfer_events(resp,request.json['id_wallet'])
-        LogFile("method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->" + str(request.json))
+        LogFile("method: API: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->" + str(request.json))
         return jsonify({'message': resp, 'status': 'status.200 OK'})
     else:
-        LogFile("method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->" + str(request.json))
+        LogFile("method: API: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->" + str(request.json))
         return jsonify({'method': 'get_bep20_token_transfer_events_by_address', 'message': "Error Invalid parameters....", 'status': 'status.HTTP_400_BAD_REQUEST'})
 
 # asynchronous call to get_bep20_token_transfer_events_by_address method of BscScan
@@ -88,6 +104,18 @@ def LogFile(text):
         return "log OK"
     except Exception as ex:
         raise ex
+
+def hello():
+    # Generate the figure **without using pyplot**.
+    fig = Figure()
+    ax = fig.subplots()
+    ax.plot([1, 2])
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    # Embed the result in the html output.
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    return f"<img src='data:image/png;base64,{data}'/>"
 
 def page_not_found(error):
     LogFile("Page not found!, sorry. Error success: False")
