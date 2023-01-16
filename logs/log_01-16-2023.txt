@@ -1,0 +1,36 @@
+
+01-16-2023-13-31-47 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bdv'}
+01-16-2023-13-51-04 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bxd'}
+01-16-2023-13-53-05 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6B'}
+01-16-2023-13-53-17 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bxd'}
+01-16-2023-13-53-18 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bxd'}
+01-16-2023-13-53-32 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-13-54-12 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-13-54-25 : method: get_bep20_token_transfer_events_by_address . Error Invalid parameters. status.HTTP_400_BAD_REQUEST INPUT ->{'id_wallet': '0x6f68979b96C39d157D271x68BD5D946a6477ef6Bd'}
+01-16-2023-13-54-32 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-13-55-16 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-13-56-15 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-14-03-31 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-14-06-27 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x6f68979b96C39d157D27168BD5D946a6477ef6Bd'}
+01-16-2023-15-08-23 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-18-32 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-20-04 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-21-48 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-23-49 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-23-59 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-24-19 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-24-49 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-35-24 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-35-49 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-39-12 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-39-19 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-39-49 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-40-05 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-40-13 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-41-17 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-41-37 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-45-35 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-48-58 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-49-13 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-50-01 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
+01-16-2023-15-50-39 : method: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->{'id_wallet': '0x1f6c7dfC333E26075B205Fe612890F7389C15e53'}
