@@ -19,6 +19,7 @@ from io import BytesIO
 
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import numpy as np
 
 from config import config
 from config import (YOUR_API_KEY)
@@ -179,26 +180,44 @@ def LogFile(text):
         raise ex
 
 def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
-
     # call Stores Procedures "transsaction_from_to_day_by_wallet" 
     cursor2 = conexion.connection.cursor()
     cursor2.callproc('transsaction_from_to_day_by_wallet', [str(id_wallet)])
     data = cursor2.fetchall()
-
-    print("data: " + str(data))
+    cut=8
+    print("len(data): " + str(len(data)))
+    if (len(data) > 10):
+        cursor2.close() 
+        # call Stores Procedures "transsaction_from_to_month_by_wallet" 
+        cursor2 = conexion.connection.cursor()
+        cursor2.callproc('transsaction_from_to_month_by_wallet', [str(id_wallet)])
+        data = cursor2.fetchall()
+        cut=6
 
     fig, ax = plt.subplots()
+    labels = []
+    fromwallet = []
+    towallet = []
+    for fila in data:
+        labels.append(str(fila[0])[:cut])
+        fromwallet.append(fila[1])
+        towallet.append(fila[2])
 
-    fruits = ['apple', 'blueberry', 'cherry', 'orange']
-    counts = [40, 100, 30, 55]
-    bar_labels = ['red', 'blue', '_red', 'orange']
-    bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
+    x = np.arange(len(labels))  # the label locations
+    width = 0.35  # the width of the bars
 
-    ax.bar(fruits, counts, label=bar_labels, color=bar_colors)
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(x - width/2, fromwallet, width, label='From')
+    rects2 = ax.bar(x + width/2, towallet, width, label='To')
 
-    ax.set_ylabel('fruit supply')
-    ax.set_title('Fruit supply by kind and color')
-    ax.legend(title='Fruit color')
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax.set_ylabel('how many transactions')
+    ax.set_title('transaction from and to')
+    ax.set_xticks(x, labels)
+    ax.legend()
+
+    ax.bar_label(rects1, padding=3)
+    ax.bar_label(rects2, padding=3)
 
     plt.savefig("src/static/graph/bar_"+id_wallet+".jpg", format="jpg")
     return "src/static/graph/"+id_wallet+".jpg"

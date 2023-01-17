@@ -2,13 +2,13 @@
 <nav class="navbar navbar-light bg-light border-bottom">
     <div class="container-fluid">
       <a class="navbar-brand" href="/"><b>Crypto Spider</b></a>
-      <img src="static\img\BTCspider.jpg" alt="Crypto Spider" width="80">
+      <img src="\static\img\BTCspider.jpg" alt="Crypto Spider" width="80">
     </div>
   </nav>
   <nav class="navbar soft-shadow">
     <form action="/events_by_address" method="POST" class="search-row" enctype="multipart/form-data">
       <div class="form-group">
-          <input class="form-control me-10" type="text" name="id_wallet" placeholder="Wallet ID" aria-label="Wallet ID" value="{{id_wallet}}">
+          <input class="form-control" type="text" name="id_wallet" placeholder="Wallet ID" aria-label="Wallet ID" value="{{id_wallet}}" maxlength="42">
       </div>
   </form>
     
