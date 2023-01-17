@@ -18,6 +18,7 @@ import base64
 from io import BytesIO
 
 from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 from config import config
 from config import (YOUR_API_KEY)
@@ -36,16 +37,26 @@ def index():
 # WEB Function events_by_address
 @app.route('/events_by_address/', methods=['POST'])
 def events_by_address():
+    print("0")
     id_wallet = request.form.get('id_wallet')
+    # Call bscScan to bring the new data into DB
+    print("1")
+    resp = asyncio.run(get_bep20_token_transfer_events_by_address(id_wallet))
+    print("2")
+    insert_bep20_token_transfer_events(resp,id_wallet)
+    print("3")
+    image_name = graph_bars_generated(id_wallet)
+    print("4")
     return render_template('events_by_address.html', id_wallet = id_wallet)
 
 # API Function that returns all employees
 @app.route('/get_bep20_token_transfer_events_by_address', methods=['POST'])
 def list_get_bep20_token_transfer_events_by_address():
     print (request.json)
-    if (wallet_id_validation(request.json['id_wallet'])):
-        resp = asyncio.run(get_bep20_token_transfer_events_by_address())
-        insert_bep20_token_transfer_events(resp,request.json['id_wallet'])
+    id_wallet = request.json['id_wallet']
+    if (wallet_id_validation(id_wallet)):
+        resp = asyncio.run(get_bep20_token_transfer_events_by_address(id_wallet))
+        insert_bep20_token_transfer_events(resp,id_wallet)
         LogFile("method: API: get_bep20_token_transfer_events_by_address. status.status.200 OK INPUT ->" + str(request.json))
         return jsonify({'message': resp, 'status': 'status.200 OK'})
     else:
@@ -53,10 +64,10 @@ def list_get_bep20_token_transfer_events_by_address():
         return jsonify({'method': 'get_bep20_token_transfer_events_by_address', 'message': "Error Invalid parameters....", 'status': 'status.HTTP_400_BAD_REQUEST'})
 
 # asynchronous call to get_bep20_token_transfer_events_by_address method of BscScan
-async def get_bep20_token_transfer_events_by_address():
+async def get_bep20_token_transfer_events_by_address(id_wallet):
     async with BscScan(YOUR_API_KEY) as client:
         return ( await client.get_bep20_token_transfer_events_by_address(
-                address= request.json['id_wallet'],
+                address= id_wallet,
                 startblock=0,
                 endblock=999999999,
                 sort="asc"
@@ -105,17 +116,22 @@ def LogFile(text):
     except Exception as ex:
         raise ex
 
-def hello():
-    # Generate the figure **without using pyplot**.
-    fig = Figure()
-    ax = fig.subplots()
-    ax.plot([1, 2])
-    # Save it to a temporary buffer.
-    buf = BytesIO()
-    fig.savefig(buf, format="png")
-    # Embed the result in the html output.
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return f"<img src='data:image/png;base64,{data}'/>"
+def graph_bars_generated(name):
+    fig, ax = plt.subplots()
+
+    fruits = ['apple', 'blueberry', 'cherry', 'orange']
+    counts = [40, 100, 30, 55]
+    bar_labels = ['red', 'blue', '_red', 'orange']
+    bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
+
+    ax.bar(fruits, counts, label=bar_labels, color=bar_colors)
+
+    ax.set_ylabel('fruit supply')
+    ax.set_title('Fruit supply by kind and color')
+    ax.legend(title='Fruit color')
+
+    plt.savefig("src/static/graph/bar_"+name+".jpg", format="jpg")
+    return "src/static/graph/"+name+".jpg"
 
 def page_not_found(error):
     LogFile("Page not found!, sorry. Error success: False")
