@@ -48,7 +48,8 @@ def events_by_address():
     resp = asyncio.run(get_bep20_token_transfer_events_by_address(id_wallet))
     if resp != None: insert_bep20_token_transfer_events(resp,id_wallet)
     image_name = graph_bars_transsaction_from_to_day_by_wallet(id_wallet)
-    return render_template('events_by_address.html', id_wallet = id_wallet, image_name = image_name)
+    image_name_hist = graph_histogram_by_wallet(id_wallet)
+    return render_template('events_by_address.html', id_wallet = id_wallet, image_name = image_name, image_name_hist = image_name_hist)
 
 # API Function that returns all employees
 @app.route('/get_bep20_token_transfer_events_by_address', methods=['POST'])
@@ -207,8 +208,8 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     width = 0.35  # the width of the bars
 
     fig, ax = plt.subplots()
-    rects1 = ax.bar(x - width/2, fromwallet, width, label='From')
-    rects2 = ax.bar(x + width/2, towallet, width, label='To')
+    rects1 = ax.bar(x - width/2, fromwallet, width, label='From', color='red')
+    rects2 = ax.bar(x + width/2, towallet, width, label='To', color='green')
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax.set_ylabel('how many transactions')
@@ -220,7 +221,29 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     ax.bar_label(rects2, padding=3)
 
     plt.savefig("src/static/graph/bar_"+id_wallet+".jpg", format="jpg")
-    return "src/static/graph/"+id_wallet+".jpg"
+    return "src/static/graph/bar_"+id_wallet+".jpg"
+
+def graph_histogram_by_wallet(id_wallet):
+    # call Stores Procedures "transsaction_from_to_day_by_wallet"
+    num_bins = 11
+    fig, ax = plt.subplots()
+
+    y = [115.73956466,112.99148762,108.267019,125.92116686,90.26067825,92.82370635,116.16827658,114.53215499,87.8598281,81.43916344,127.90174814,95.37521144]
+    x = ['01/02/2021','01/03/2021','01/04/2021','01/05/2021','01/06/2021','01/07/2021','01/08/2021','01/09/2021','01/10/2021','01/11/2021','01/12/2021','11/12/2021']
+
+    # the histogram of the data
+    n, bins, patches = ax.hist(x, num_bins, density=True)
+
+    ax.plot(bins, y, '--')
+    ax.set_xlabel('Dates')
+    ax.set_ylabel('USD')
+    ax.set_title('Histogram of USD in wallet')
+
+    # Tweak spacing to prevent clipping of ylabel
+    fig.tight_layout()
+    plt.savefig("src/static/graph/histogram_"+id_wallet+".jpg", format="jpg")
+    return "src/static/graph/histogram_"+id_wallet+".jpg"
+
 
 def graph_bars_generated(name):
     fig, ax = plt.subplots()
