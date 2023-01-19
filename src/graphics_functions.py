@@ -38,7 +38,6 @@ app = Flask(__name__)
 
 conexion = MySQL(app)
 
-
 ###### GRAPHICS FUNCTIONS ######
 
 def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
@@ -47,7 +46,7 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     cursor2.callproc('transsaction_from_to_day_by_wallet', [str(id_wallet)])
     data = cursor2.fetchall()
     cut=8
-    print("len(data): " + str(len(data)))
+    print("len(data) bar: " + str(len(data)))
     if (len(data) > 10):
         cursor2.close() 
         # call Stores Procedures "transsaction_from_to_month_by_wallet" 
@@ -80,17 +79,42 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
 
     ax.bar_label(rects1, padding=3)
     ax.bar_label(rects2, padding=3)
-
+    cursor2.close() 
     plt.savefig("src/static/graph/bar_"+id_wallet+".jpg", format="jpg")
     return "src/static/graph/bar_"+id_wallet+".jpg"
 
-def graph_histogram_by_wallet(id_wallet):
+def graph_histogram_by_wallet(id_wallet, money):
+    conexion = MySQL(app)
+    # call Stores Procedures "transactions_bep20_by_day_money_valuated" 
+    print("call histogram store: " + str(id_wallet) + " - " + money)
+    arg = ['0x4daad200f66d2a85ce308bac43fa73c0e48e48df','usd']
+    print("arg: " + str(arg))
+    cursor6 = conexion.connection.cursor()
+    cursor6.callproc('transsactions_bep20_by_day_money_valuated', [str(id_wallet)])
+    #cursor6.callproc('transsaction_from_to_day_by_wallet', [str(id_wallet)])
+    data = cursor6.fetchall()
+    print("len(data) histogram: " + str(len(data)))
+    if (len(data) > 100000000):
+        cursor2.close() 
+        # call Stores Procedures "transactions_bep20_by_month_money_valuated" 
+        cursor2 = conexion.connection.cursor()
+        cursor2.callproc('transsactions_bep20_by_day_money_valuated', [str(id_wallet)])
+        data = cursor2.fetchall()
+    
+
+
     # call Stores Procedures "transsaction_from_to_day_by_wallet"
     num_bins = 11
     fig, ax = plt.subplots()
-
-    y = [115.73956466,112.99148762,108.267019,125.92116686,90.26067825,92.82370635,116.16827658,114.53215499,87.8598281,81.43916344,127.90174814,95.37521144]
-    x = ['01/02/2021','01/03/2021','01/04/2021','01/05/2021','01/06/2021','01/07/2021','01/08/2021','01/09/2021','01/10/2021','01/11/2021','01/12/2021','11/12/2021']
+    y = []
+    x = []
+    for fila in data:
+        print(str(fila[0] + " - " +fila[1] + " - " +fila[2] + " - " + fila[2]-fila[1]))
+        y.append(str(fila[2]-fila[1]))
+        x.append(fila[0])
+    cursor6.close() 
+    #y = [115.73956466,112.99148762,108.267019,125.92116686,90.26067825,92.82370635,116.16827658,114.53215499,87.8598281,81.43916344,127.90174814,95.37521144]
+    #x = ['01/02/2021','01/03/2021','01/04/2021','01/05/2021','01/06/2021','01/07/2021','01/08/2021','01/09/2021','01/10/2021','01/11/2021','01/12/2021','11/12/2021']
 
     # the histogram of the data
     n, bins, patches = ax.hist(x, num_bins, density=True, )

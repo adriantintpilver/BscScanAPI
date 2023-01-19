@@ -94,7 +94,6 @@ def insert_bep20_token_transfer_events(var_json,id_wallet):
                 cursor = conexion.connection.cursor()
                 sql = str(sql_querys['sql_insert_bep20_token_transfer_events_by_address']).format(field_dict['blockHash'],
                                                                     field_dict['blockNumber'],field_dict['confirmations'],field_dict['contractAddress'],field_dict['cumulativeGasUsed'],field_dict['from'],field_dict['gas'],field_dict['gasPrice'],field_dict['gasUsed'],field_dict['hash'],field_dict['input'],field_dict['nonce'],field_dict['timeStamp'],field_dict['to'],field_dict['tokenDecimal'],field_dict['tokenName'],field_dict['tokenSymbol'],field_dict['transactionIndex'],value)
-                print("sql: " + sql)                                            
                 cursor.execute(sql)
                 conexion.connection.commit()
         return None
