@@ -26,6 +26,7 @@ from io import BytesIO
 
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import numpy as np
 
 from config import config
@@ -84,38 +85,35 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     return "src/static/graph/bar_"+id_wallet+".jpg"
 
 def graph_histogram_by_wallet(id_wallet, money):
-    conexion = MySQL(app)
     # call Stores Procedures "transactions_bep20_by_day_money_valuated" 
     print("call histogram store: " + str(id_wallet) + " - " + money)
-    arg = ['0x4daad200f66d2a85ce308bac43fa73c0e48e48df','usd']
-    print("arg: " + str(arg))
     cursor6 = conexion.connection.cursor()
-    cursor6.callproc('transsactions_bep20_by_day_money_valuated', [str(id_wallet)])
-    #cursor6.callproc('transsaction_from_to_day_by_wallet', [str(id_wallet)])
+    sql = str(sql_querys['sql_transsactions_by_day_money_valuated']).format(str(id_wallet), str(money))
+    cursor6.execute(sql)
+    conexion.connection.commit()          
+
     data = cursor6.fetchall()
+    #print ("data: " + str(data))
     print("len(data) histogram: " + str(len(data)))
-    if (len(data) > 100000000):
-        cursor2.close() 
+    if (len(data) > 10):
         # call Stores Procedures "transactions_bep20_by_month_money_valuated" 
-        cursor2 = conexion.connection.cursor()
-        cursor2.callproc('transsactions_bep20_by_day_money_valuated', [str(id_wallet)])
-        data = cursor2.fetchall()
+        sql = str(sql_querys['sql_transsactions_by_month_money_valuated']).format(str(id_wallet), str(money))
+        print(sql)
+        cursor6.execute(sql)
+        conexion.connection.commit()   
+        data = cursor6.fetchall()
+        print("len(data) histogram: " + str(len(data)))
+
     
-
-
-    # call Stores Procedures "transsaction_from_to_day_by_wallet"
-    num_bins = 11
+    num_bins = len(data)-1
     fig, ax = plt.subplots()
     y = []
     x = []
     for fila in data:
-        print(str(fila[0] + " - " +fila[1] + " - " +fila[2] + " - " + fila[2]-fila[1]))
+        #print(str(fila[0]) + " - " +str(fila[1]) + " - " +str(fila[2]) + " - " + str(fila[2]-fila[1]))
         y.append(str(fila[2]-fila[1]))
         x.append(fila[0])
     cursor6.close() 
-    #y = [115.73956466,112.99148762,108.267019,125.92116686,90.26067825,92.82370635,116.16827658,114.53215499,87.8598281,81.43916344,127.90174814,95.37521144]
-    #x = ['01/02/2021','01/03/2021','01/04/2021','01/05/2021','01/06/2021','01/07/2021','01/08/2021','01/09/2021','01/10/2021','01/11/2021','01/12/2021','11/12/2021']
-
     # the histogram of the data
     n, bins, patches = ax.hist(x, num_bins, density=True, )
 
@@ -128,6 +126,77 @@ def graph_histogram_by_wallet(id_wallet, money):
     fig.tight_layout()
     plt.savefig("src/static/graph/histogram_"+id_wallet+".jpg", format="jpg")
     return "src/static/graph/histogram_"+id_wallet+".jpg"
+
+def graph_timeline_by_wallet(id_wallet, money):
+    # call Stores Procedures "transactions_bep20_by_day_money_valuated" 
+    print("call histogram store: " + str(id_wallet) + " - " + money)
+    cursor6 = conexion.connection.cursor()
+    sql = str(sql_querys['sql_transsactions_by_day_money_valuated']).format(str(id_wallet), str(money))
+    cursor6.execute(sql)
+    conexion.connection.commit()          
+
+    data = cursor6.fetchall()
+    #print ("data: " + str(data))
+    print("len(data) timeline : " + str(len(data)))
+    if (len(data) > 10000):
+        # call Stores Procedures "transactions_bep20_by_month_money_valuated" 
+        sql = str(sql_querys['sql_transsactions_by_month_money_valuated']).format(str(id_wallet), str(money))
+        print(sql)
+        cursor6.execute(sql)
+        conexion.connection.commit()   
+        data = cursor6.fetchall()
+        print("len(data) timeline : " + str(len(data)))
+
+    
+    dates = []
+    names = []
+    for fila in data:
+        #print(str(fila[0]) + " - " +str(fila[1]) + " - " +str(fila[2]) + " - " + str(fila[2]-fila[1]))
+        if (float(str(fila[1])) > 0 and float(str(fila[2])) > 0):
+            names.append(str(fila[2]-fila[1]))
+        else:
+            if (float(str(fila[2])) > 0):
+                names.append(str(fila[2]))
+            else:    
+                names.append(str(0))
+        dates.append(fila[0])
+    dates = [datetime.datetime.strptime(d, "%y-%m-%d") for d in dates]
+
+    # Choose some nice levels
+    levels = np.tile([-5, 5, -3, 3, -1, 1],
+                    int(np.ceil(len(dates)/6)))[:len(dates)]
+
+    # Create figure and plot a stem plot with the date
+    fig, ax = plt.subplots(figsize=(8.8, 4), constrained_layout=True)
+    ax.set(title="transactions in out from wallet")
+
+    ax.vlines(dates, 0, levels, color="tab:red")  # The vertical stems.
+    ax.plot(dates, np.zeros_like(dates), "-o",
+            color="k", markerfacecolor="w")  # Baseline and markers on it.
+
+    # annotate lines
+    for d, l, r in zip(dates, levels, names):
+        ax.annotate(r, xy=(d, l),
+                    xytext=(-3, np.sign(l)*3), textcoords="offset points",
+                    horizontalalignment="right",
+                    verticalalignment="bottom" if l > 0 else "top")
+
+    # format xaxis with 4 month intervals
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=4))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+    plt.setp(ax.get_xticklabels(), rotation=30, ha="right")
+
+    # remove y axis and spines
+    ax.yaxis.set_visible(False)
+    ax.spines[["left", "top", "right"]].set_visible(False)
+
+    ax.margins(y=0.1)
+
+
+    #dates = [datetime.datetime.strptime(d, "%y-%M") for d in dates]
+    plt.savefig("src/static/graph/timeline_"+id_wallet+".jpg", format="jpg")
+    return "src/static/graph/timeline_"+id_wallet+".jpg"
+
 
 
 def graph_bars_generated(name):
