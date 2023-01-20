@@ -10,5 +10,10 @@ sql_querys = {
     # select read_coins_history query
     'sql_read_coins_history_db': """SELECT * FROM coins_history as ch where ch.id_coin = '{0}' and ch.date_price = '{1}' and ch.money = '{2}'""",
     # select read_coins_history query
-    'sql_insert_coins_history_db': """INSERT INTO coins_history (id_coin, price, market_cap, date_price, money) VALUES ('{0}',{1},{2},'{3}','{4}')"""
+    'sql_insert_coins_history_db': """INSERT INTO coins_history (id_coin, price, market_cap, date_price, money) VALUES ('{0}',{1},{2},'{3}','{4}')""",
+    # select transsactions_by_day_money_valuated query
+    'sql_transsactions_by_day_money_valuated': """SELECT DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d') as date, SUM(CASE WHEN e.fromwallet = '{0}' THEN (e.value * (select ch.price from coins_history as ch where ch.id_coin = e.tokenName and ch.money='{1}' and date_price=DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d')))  ELSE 0 END) 'fromwallet', SUM(CASE WHEN e.towallet = '{0}' THEN (e.value * (select ch.price from coins_history as ch where ch.id_coin = e.tokenName and ch.money='{1}' and date_price=DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d')))  ELSE 0 END) 'towallet' FROM BscScanAPI_DB.bep20_token_transfer_events as e where e.fromwallet = '{0}' or e.towallet = '{0}' group by date order by date ASC""",
+    # select transsactions_by_month_money_valuated query
+    'sql_transsactions_by_month_money_valuated': """SELECT DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%M') as date, SUM(CASE WHEN e.fromwallet = '{0}' THEN (e.value * (select ch.price from coins_history as ch where ch.id_coin = e.tokenName and ch.money='{1}' and date_price=DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d')))  ELSE 0 END) 'fromwallet', SUM(CASE WHEN e.towallet = '{0}' THEN (e.value * (select ch.price from coins_history as ch where ch.id_coin = e.tokenName and ch.money='{1}' and date_price=DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d')))  ELSE 0 END) 'towallet' FROM BscScanAPI_DB.bep20_token_transfer_events as e where e.fromwallet = '{0}' or e.towallet = '{0}' group by date order by date ASC"""
+
 }
