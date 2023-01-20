@@ -64,15 +64,15 @@ CREATE TABLE `bep721_token_transfer_events` (
 --
 -- Table coins_history script
 --
-    CREATE TABLE IF NOT EXISTS coins_history
-(
-    `id_coin` varchar(200) NOT NULL,
-    `price` decimal(65,20),
-    `market_cap` decimal(65,20),
-    `date_price` date NOT NULL,
-    `money` varchar(50) NOT NULL,
-    CONSTRAINT coins_history_pkey PRIMARY KEY (id_coin, date_price, money)
-)
+   CREATE TABLE `coins_history` (
+  `id_coin` varchar(200) NOT NULL,
+  `price` decimal(65,20) DEFAULT NULL,
+  `market_cap` decimal(65,20) DEFAULT NULL,
+  `date_price` date NOT NULL,
+  `money` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_coin`,`date_price`,`money`),
+  KEY `idx_coins_history_date_price_id_coin_money` (`date_price`,`id_coin`,`money`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 --
 -- Stored procedure to count transaccion form and to by day by wallet id
 --
