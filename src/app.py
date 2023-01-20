@@ -58,8 +58,9 @@ def events_by_address():
     if resp != None: insert_bep20_token_transfer_events(resp,id_wallet)
     image_name = graph_bars_transsaction_from_to_day_by_wallet(id_wallet)
     #image_name = 'feo.jpj'
-    image_name_hist = graph_timeline_by_wallet(id_wallet,'usd')
-    return render_template('events_by_address.html', id_wallet = id_wallet, image_name = image_name, image_name_hist = image_name_hist)
+    #image_name_hist = graph_timeline_by_wallet(id_wallet,'usd')
+    image_name_value = graph_stock_by_dates_2(id_wallet)
+    return render_template('events_by_address.html', id_wallet = id_wallet, image_name = image_name, image_name_value = image_name_value)
 
 # API Function that bep20_token_transfer_events
 @app.route('/get_bep20_token_transfer_events_by_address', methods=['POST'])
