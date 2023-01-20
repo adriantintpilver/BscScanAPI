@@ -9,8 +9,18 @@
         {% include("partials/navigation.html") %}
         <div class="container-fluid p-5 ">
             <div class="row">
-            Wallet Address: {{id_wallet}}
-            <img src='/static/graph/bar_{{id_wallet}}.jpg' width="90%" height="50%"/>
+                Wallet Address: <b>{{id_wallet}}</b>
+            </div>
+            <div class="row">
+                <div class="col-1 my-auto mx-auto">
+                    <img src='/static/graph/bar_{{id_wallet}}.jpg'/>
+                </div>
+                <div class="col-4 my-auto mx-auto"></div>
+                    <img src='/static/graph/barvaluated_{{id_wallet}}.jpg'/>
+                </div>
+                <div class="col-4 my-auto mx-auto"></div>
+                    <img src='/static/graph/timeline_{{id_wallet}}.jpg'/>
+                </div>
             </div>
         </div>
     </body>
