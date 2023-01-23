@@ -76,6 +76,7 @@ CREATE TABLE `bep721_token_transfer_events` (
 --
 -- Stored procedure to count transaccion form and to by day by wallet id
 --
+DELIMITER $$
 USE `BscScanAPI_DB` $$
 DROP procedure IF EXISTS `transsaction_from_to_day_by_wallet`$$
 CREATE PROCEDURE `transsaction_from_to_day_by_wallet`(IN id_wallet VARCHAR(42))
