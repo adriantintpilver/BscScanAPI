@@ -1,0 +1,20 @@
+version: "3"
+
+services:
+  app:
+    container_name: BscScanAPI
+    build: .
+    ports:
+      - "5000:5000"
+    links:
+      - db
+
+  db:
+    container_name: BscScanAPI_MYSQL
+    image: mysql:latest
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: BscScanAPI_PasSWoRd
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d/:ro
