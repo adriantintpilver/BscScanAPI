@@ -20,7 +20,6 @@ from AccessData import sql_querys
 import calendar
 from urllib.request import urlopen
 
-
 import base64
 from io import BytesIO
 
@@ -28,7 +27,7 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 import numpy as np
-import yfinance as yf
+import seaborn as sns
 
 from config import config
 from config import (YOUR_API_KEY)
@@ -86,150 +85,37 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     return "src/static/graph/bar_"+id_wallet+".jpg"
 
 def graph_stock_by_dates_2(id_wallet):
-    #Obtenemos datos históricos de un ticket (por ejemplo GOOGL)
-    #precios = yf.download("GOOG", start="2012-01-01")
-    #Convertimos a datetime object el resultado con pandas
-    #precios.index = pd.to_datetime(precios.index)
-    #Mostramos los cinco primeros registros del resultado para depurar
-    #print(precios.head(5))
-    #print(precios.index)
-
+    import plotly.express as px
     cursor2 = conexion.connection.cursor()
     sql = str(sql_querys['sql_wallet_stock_by_day']).format(str(id_wallet))
+    print(sql)
     cursor2.execute(sql)
     data = cursor2.fetchall()
-    precios = [{'2012-01-03 00:00:00-05:00', '16.262545', '16.641375', '16.248346', '16.573130', '16.573130', '147611217'},
-    {'2012-01-04 00:00:00-05:00', '16.563665', '16.693678', '16.453827', '16.644611', '16.644611', '114989399'},
-    {'2012-01-05 00:00:00-05:00', '16.491436', '16.537264', '16.344486', '16.413727', '16.413727', '131808205'},
-    {'2012-01-06 00:00:00-05:00', '16.417213', '16.438385', '16.184088', '16.189817', '16.189817', '108119746'},
-    {'2012-01-09 00:00:00-05:00', '16.102144', '16.114599', '15.472754', '15.503389', '15.503389', '233776981'}]
 
-    json_origin = '''
-    {
-  "chart": {
-    "result": [
-      {
-        "meta": {
-          "currency": "USD",
-          "symbol": "GOOG",
-          "exchangeName": "NMS",
-          "instrumentType": "EQUITY",
-          "firstTradeDate": 1092922200,
-          "regularMarketTime": 1674248404,
-          "gmtoffset": -18000,
-          "timezone": "EST",
-          "exchangeTimezoneName": "America/New_York",
-          "regularMarketPrice": 99.28,
-          "chartPreviousClose": 92.16,
-          "priceHint": 2,
-          "currentTradingPeriod": {
-            "pre": {
-              "timezone": "EST",
-              "start": 1674205200,
-              "end": 1674225000,
-              "gmtoffset": -18000
-            },
-            "regular": {
-              "timezone": "EST",
-              "start": 1674225000,
-              "end": 1674248400,
-              "gmtoffset": -18000
-            },
-            "post": {
-              "timezone": "EST",
-              "start": 1674248400,
-              "end": 1674262800,
-              "gmtoffset": -18000
-            }
-          },
-          "dataGranularity": "1d",
-          "range": "3d",
-          "validRanges": [
-            "1d",
-            "5d",
-            "1mo",
-            "3mo",
-            "6mo",
-            "1y",
-            "2y",
-            "5y",
-            "10y",
-            "ytd",
-            "max"
-          ]
-        },
-        "timestamp": [
-          1674052200,
-          1674138600,
-          1674248404
-        ],
-        "indicators": {
-          "quote": [
-            {
-              "low": [
-                91.4000015258789,
-                91.37999725341797,
-                95.91000366210938
-              ],
-              "close": [
-                91.77999877929688,
-                93.91000366210938,
-                99.27999877929688
-              ],
-              "high": [
-                93.58799743652344,
-                94.4000015258789,
-                99.41999816894531
-              ],
-              "volume": [
-                19641600,
-                28707700,
-                52478175
-              ],
-              "open": [
-                92.94000244140625,
-                91.38999938964844,
-                95.94999694824219
-              ]
-            }
-          ],
-          "adjclose": [
-            {
-              "adjclose": [
-                91.77999877929688,
-                93.91000366210938,
-                99.27999877929688
-              ]
-            }
-          ]
-        }
-      }
-    ],
-    "error": null
-  }
-}    
-    '''
-    data = json.loads(json_origin)
-    precios = pd.read_json(data,orient ='index')
     x = []
     money = []
     stock = 0
+    date = []
     for fila in data:
-        x.append(fila[0])
         stock = float(stock) + float(fila[1])
-        money.append(str(stock))
-        #precios.append([fila[0],stock])
+        money.append(stock)
+        date.append(fila[0])
 
-    precios.index = pd.to_datetime(precios.index)
-    #Dibujamos una gráfica con el resultado
-    plt.figure(figsize=(10,7))
-    #Ajustamos a dividendos y splits
-    precios['Adj Close'].plot()
-    #Configurarmos la gráfica
-    plt.title('Precios de Google (últimos 10 años)', fontsize=14)
-    plt.xlabel('Año-Mes', fontsize=12)
-    plt.ylabel('Precio', fontsize=12)
-    #Mostramos la gráfica
+    print("len(data): " + str(len(data)))
+    print("date: " + str(date))
+    print("money: " + str(money))
+    print("x: " + str(x))
+ 
+    data1 = pd.DataFrame({'index': np.arange(0, len(data)).tolist(),
+                        'code' : '000300.SH',
+                        'date' : date,
+                        'open' : money,
+                        'close': money
+    })
+
+    sns.set_style('darkgrid')
+    data1.plot(x='s', y='USD', figsize=(12,6));
+  
     plt.savefig("src/static/graph/stock_"+id_wallet+".jpg", format="jpg",dpi=100)
     return "src/static/graph/stock_"+id_wallet+".jpg"
 
