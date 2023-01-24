@@ -15,7 +15,6 @@ import os
 import copy
 import json
 import pandas as pd
-import pandavro as pdx
 from AccessData import sql_querys 
 import calendar
 from urllib.request import urlopen
