@@ -107,7 +107,7 @@ CREATE PROCEDURE `transsaction_from_to_month_by_wallet`(IN id_wallet VARCHAR(42)
             order by date DESC;
     END$$
 --
--- Stored procedure to count transaccion form and to by month by wallet id
+-- Stored procedure to count transaccion form and to by month by wallet
 --
 USE `BscScanAPI_DB` $$
 DROP procedure IF EXISTS `transactions_bep20_by_day_money_valuated`$$
