@@ -13,8 +13,6 @@ services:
     volumes:
       - .:/usr/src/BscScanAPI
     working_dir: /BscScanAPI
-    expose:
-      - 5000
 
   db:
     container_name: BscScanAPI_MYSQL
