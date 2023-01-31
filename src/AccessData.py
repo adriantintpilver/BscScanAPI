@@ -23,4 +23,5 @@ sql_querys = {
     'sql_wallet_stock_by_day': """SELECT DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%y-%m-%d') as date, (select SUM(CASE WHEN e.towallet = '{0}' THEN e.value ELSE 0 END) - SUM(CASE WHEN e.fromwallet = '{0}' THEN e.value ELSE 0 END) from dual) as 'dif' FROM BscScanAPI_DB.bep20_token_transfer_events as e where e.fromwallet = '{0}' or e.towallet = '{0}' group by date order by date ASC""" ,
     # select wallet_stock_by month query
     'sql_wallet_stock_by_month':  """SELECT DATE_FORMAT(FROM_UNIXTIME(e.timestamp), '%Y-%m') as date, (select SUM(CASE WHEN e.towallet = '{0}' THEN e.value ELSE 0 END) - SUM(CASE WHEN e.fromwallet = '{0}' THEN e.value ELSE 0 END) from dual) as 'dif' FROM BscScanAPI_DB.bep20_token_transfer_events as e where e.fromwallet = '{0}' or e.towallet = '{0}' group by date order by date ASC""" 
+
 }
