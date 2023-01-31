@@ -1,15 +1,14 @@
-FROM python:3
+FROM python:3.10.7
 
-RUN mkdir /BscScanAPI
+WORKDIR /
 
-WORKDIR /BscScanAPI
-
-COPY requirements.txt /BscScanAPI
+COPY ./requirements.txt /requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY . /BscScanAPI
+COPY . .
 
 EXPOSE 5000
 
-CMD [ "python", ".\src\app.py" ]
+CMD ["python", "./src/app.py"]
+#CMD [ "python", "view.py" ]
