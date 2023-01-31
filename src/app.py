@@ -15,7 +15,7 @@ import os
 import copy
 import json
 import pandas as pd
-from AccessData import sql_querys 
+from accessdata import sql_querys 
 import calendar
 from urllib.request import urlopen
 
@@ -59,6 +59,7 @@ def events_by_address():
     #image_name = 'feo.jpj'
     #image_name_hist = graph_timeline_by_wallet(id_wallet,'usd')
     image_name_value = graph_stock_by_dates_2(id_wallet)
+    #image_name_value = "a"
     return render_template('events_by_address.html', id_wallet = id_wallet, image_name = image_name, image_name_value = image_name_value)
 
 # API Function that bep20_token_transfer_events
@@ -108,4 +109,5 @@ def page_not_found(error):
 if __name__ == '__main__':
     app.config.from_object(config['development'])
     app.register_error_handler(404, page_not_found)
+    #app.run(host="localhost", port=4444)
     app.run()

@@ -15,7 +15,7 @@ import os
 import copy
 import json
 import pandas as pd
-from AccessData import sql_querys 
+from accessdata import sql_querys 
 import calendar
 from urllib.request import urlopen
 
@@ -84,12 +84,20 @@ def graph_bars_transsaction_from_to_day_by_wallet(id_wallet):
     return "src/static/graph/bar_"+id_wallet+".jpg"
 
 def graph_stock_by_dates_2(id_wallet):
+    #https://pandas.pydata.org/pandas-docs/version/0.24.0rc1/api/generated/pandas.DataFrame.plot.area.html
     import plotly.express as px
     cursor2 = conexion.connection.cursor()
     sql = str(sql_querys['sql_wallet_stock_by_day']).format(str(id_wallet))
     print(sql)
     cursor2.execute(sql)
     data = cursor2.fetchall()
+    if (len(data) > 15):
+        cursor2.close() 
+        cursor2 = conexion.connection.cursor()
+        sql = str(sql_querys['sql_wallet_stock_by_month']).format(str(id_wallet))
+        print(sql)
+        cursor2.execute(sql)
+        data = cursor2.fetchall()
 
     x = []
     money = []
@@ -97,24 +105,24 @@ def graph_stock_by_dates_2(id_wallet):
     date = []
     for fila in data:
         stock = float(stock) + float(fila[1])
-        money.append(stock)
+        if (stock > 0):
+            money.append(stock)    
+        else:
+            money.append(0)
         date.append(fila[0])
 
-    print("len(data): " + str(len(data)))
-    print("date: " + str(date))
-    print("money: " + str(money))
-    print("x: " + str(x))
- 
-    data1 = pd.DataFrame({'index': np.arange(0, len(data)).tolist(),
-                        'code' : '000300.SH',
-                        'date' : date,
-                        'open' : money,
-                        'close': money
-    })
+    #print("len(data): " + str(len(data)))
+    #print("date: " + str(date))
+    #print("money: " + str(money))
+    #print("x: " + str(x))
 
-    sns.set_style('darkgrid')
-    data1.plot(x='s', y='USD', figsize=(12,6));
-  
+    df = pd.DataFrame({
+        'money': money,
+        #'visits': [20, 42, 28],
+        'date': date,
+        })
+    ax = df.plot.area(x='date', figsize=(16,8))
+   
     plt.savefig("src/static/graph/stock_"+id_wallet+".jpg", format="jpg",dpi=100)
     return "src/static/graph/stock_"+id_wallet+".jpg"
 

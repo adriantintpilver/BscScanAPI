@@ -15,7 +15,7 @@ import os
 import copy
 import json
 import pandas as pd
-from AccessData import sql_querys 
+from accessdata import sql_querys 
 import calendar
 from urllib.request import urlopen
 
