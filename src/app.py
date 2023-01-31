@@ -109,5 +109,5 @@ def page_not_found(error):
 if __name__ == '__main__':
     app.config.from_object(config['development'])
     app.register_error_handler(404, page_not_found)
-    #app.run(host="localhost", port=4444)
-    app.run()
+    app.run(host="0.0.0.0", port=5000)
+
