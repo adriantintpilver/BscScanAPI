@@ -29,9 +29,9 @@ import numpy as np
 from config import config
 from config import (YOUR_API_KEY)
 from validations import *
-#from functions import *
+from functions import *
 from graphics_functions import *
-#from accessdata import sql_querys 
+from accessdata import sql_querys 
 
 now = datetime.datetime.utcnow()
 app = Flask(__name__)
