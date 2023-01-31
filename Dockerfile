@@ -10,5 +10,4 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "./src/app.py"]
-#CMD [ "python", "view.py" ]
+CMD ["python3", "./src/app.py"]
