@@ -9,6 +9,8 @@ services:
       - "5000:5000"
     links:
       - "db"
+    environment:
+      - DEBUG=1
   db:
     container_name: BscScanAPI_MYSQL
     image: mysql:latest
